@@ -1,0 +1,12 @@
+QtVideolog
+============================
+
+Copyright: Jukka Dahlbom, 2010
+
+QtVideolog is a learning project aiming to create a video streaming
+application with a futuristic UI, while learning the latest features
+of Qt in the process.
+
+QtVideolog is currently built against the Qt 4.7 technical preview,
+and both incompatible backwards, and likely to be incompatible with
+Qt 4.7 stable release if the planned API changes take place.
