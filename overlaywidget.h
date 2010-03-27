@@ -7,6 +7,7 @@
 
 
 class OverlayWidgetImpl;
+class DataObject;
 
 class OverlayWidget : public QWidget {
     Q_OBJECT
@@ -15,7 +16,10 @@ public:
     ~OverlayWidget();
 private:
     OverlayWidgetImpl *impl;
+    void printDO();
     friend class OverlayWidgetImpl;
+public slots:
+    void detailsChanged(DataObject *ptr);
 };
 
 

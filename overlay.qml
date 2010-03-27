@@ -3,7 +3,7 @@ import Qt 4.6
     Rectangle {
         anchors.top: parent.top
         anchors.right: parent.right
-        width: 300
+        width: 400
         height: 300
         color: "lightSteelBlue"
 
@@ -12,7 +12,7 @@ import Qt 4.6
 
             Item {
                 id: delegateWrapper
-                width: 150
+                width: 200
                 height: 70
                 Rectangle {
                     anchors.fill : parent
@@ -33,12 +33,9 @@ import Qt 4.6
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        console.log(model.text);
-                        console.log(model.bgColor);
-                        console.log(model.image);
+                        fake_model.moreInfoRequested(index)
                     }
                 }
-
             }
         }
 
@@ -48,8 +45,29 @@ import Qt 4.6
             delegate: listItemDelegate
             anchors.top: parent.top
             anchors.right: parent.right
-            width: 300
+            width: 200
             height: 300
+        }
+
+        Rectangle {
+            id: detailsArea
+            anchors.right : stringList.left
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+
+            color : detailObject.color
+            Column {
+                Image {
+                    source: detailObject.url
+                }
+                Text {
+                    text: detailObject.name
+                }
+                Text {
+                    text: detailObject.description
+                }
+            }
         }
     }
 

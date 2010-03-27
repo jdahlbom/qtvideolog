@@ -14,6 +14,13 @@ public:
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
+
+signals:
+    void detailObjectChanged(DataObject *doPtr);
+
+public slots:
+    void moreInfoRequested(int index);
+
 private:
     Q_DISABLE_COPY(SimpleListModel);
     QList<DataObject *> m_items;
