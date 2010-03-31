@@ -1,6 +1,10 @@
 import Qt 4.6
 
 Item {
+    id: root
+    property color textColor: "#BBBBBB"
+    property color bgColor: "#DDDDDD"
+
     width: 1200
     height: 800
 
@@ -10,20 +14,43 @@ Item {
         Item {
             id: delegateWrapper
             width: 200
-            height: 70
+            height: 80
             Rectangle {
-                anchors.fill : parent
-                color : model.bgColor
-                z : 1
+                radius: 10
+                anchors.fill: parent
+                gradient: Gradient {
+                    GradientStop {
+                        position: 1.0
+                        color: "#000011"
+                    }
+                    GradientStop {
+                        position: 0.5
+                        color: "#111122"
+                    }
+                    GradientStop {
+                        position: 0.2
+                        color: "#222244"
+                    }
+                    GradientStop {
+                        position: 0.0
+                        color: "#111122"
+                    }
+                }
             }
 
             Row  {
+                x: 10
                 z : 2
                 Image {
+                    y: 10
+                    id: delegateImage
                     source: model.image
                 }
                 Text {
+                    anchors.leftMargin: 10
+                    anchors.verticalCenter: delegateImage.verticalCenter
                     text: model.text
+                    color: root.textColor
                 }
             }
 
@@ -66,12 +93,15 @@ Item {
     Rectangle {
         id: detailsArea
         anchors.right : stringList.left
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.bottom: parent.bottom
+
+        width: 400
+        y: 200
+        height: 300
 
         opacity: 0.7
-        color : detailObject.color
+        color : root.bgColor
+        radius: 10
+
         state: "detailsHidden"
 
         property int clickCount : 0
@@ -101,18 +131,48 @@ Item {
             }
         }
 
+        Item {
+            anchors.margins: 20
 
-        Column {
             Image {
+                id: detailImg
+                x: 30
+                y: 30
                 source: detailObject.url
             }
             Text {
+                id : detailTitle
+                anchors.left: detailImg.right
+                anchors.leftMargin: 20
+                anchors.topMargin: 20
+                anchors.top: parent.top
+                wrap: true
+                font.pointSize: 20
+                font.bold: true
+                smooth: true
                 text: detailObject.name
             }
+
             Text {
+                id: detailDesc
+                anchors.top: detailTitle.bottom
+                anchors.left: detailImg.right
+                anchors.leftMargin: 20
+                text: "Description: "
+                font.bold: true
+            }
+
+            Text {
+                anchors.left: detailImg.right
+                anchors.top: detailDesc.bottom
+                anchors.leftMargin: 20
+                wrap: true
+
                 text: detailObject.description
             }
         }
+
+
 
         states: [
         State {
