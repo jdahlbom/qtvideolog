@@ -14,14 +14,16 @@ SOURCES += main.cpp\
     dataobject.cpp \
     simplelistmodel.cpp \
     modifiedqdeclarativeview.cpp \
-    videomailwidget.cpp
+    videomailwidget.cpp \
+    VideoData.cpp
 
 HEADERS  += \
     overlaymanager.h \
     dataobject.h \
     simplelistmodel.h \
     modifiedqdeclarativeview.h \
-    videomailwidget.h
+    videomailwidget.h \
+    VideoData.h
 
 OTHER_FILES += \
     overlay.qml

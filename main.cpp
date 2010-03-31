@@ -23,6 +23,14 @@ int main(int argc, char *argv[])
 
     QObject::connect(overlay, SIGNAL(videoLaunchRequested(QString)),
                      &video, SLOT(setSource(QString)));
+    QObject::connect(overlay, SIGNAL(videoPlayRequested()),
+                     &video, SLOT(play()));
+    QObject::connect(overlay, SIGNAL(videoPauseRequested()),
+                     &video, SLOT(pause()));
+    QObject::connect(overlay, SIGNAL(videoSeekRequested(double)),
+                     &video, SLOT(seek(double)));
+    QObject::connect(&video, SIGNAL(sendVideoInfo(int,int)),
+                     overlay, SLOT(updateVideoInfo(int,int)));
 
     QGraphicsProxyWidget *proxy = view->scene()->addWidget(&video);
     //proxy->show();

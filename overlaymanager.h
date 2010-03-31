@@ -9,6 +9,8 @@ class ModifiedQDeclarativeView;
 class OverlayManagerImpl;
 class DataObject;
 
+
+
 class OverlayManager : public QObject {
     Q_OBJECT
 public:
@@ -16,14 +18,20 @@ public:
     ~OverlayManager();
 private:
     OverlayManagerImpl *impl;
-    void printDO();
     friend class OverlayManagerImpl;
 signals:
     void videoLaunchRequested(QString source);
+    void videoSeekRequested(double seekPercentage);
+    void videoPlayRequested();
+    void videoPauseRequested();
 
 public slots:
     void detailsChanged(DataObject *ptr);
     void requestVideoLaunch(const QString &source);
+    void requestVideoPause();
+    void requestVideoPlay();
+    void requestVideoSeek(double seekPercentage);
+    void updateVideoInfo(int totalLength, int currentTime);
 };
 
 

@@ -26,6 +26,14 @@ VideoMailWidget::VideoMailWidget(QWidget *parent):
 
     connect(mediaObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
 	    this, SLOT(stateChanged(Phonon::State, Phonon::State)));
+
+    infoTimer.setInterval(200);
+    infoTimer.setSingleShot(false);
+    connect(&infoTimer, SIGNAL(timeout()), this, SLOT(videoUpdated()));
+}
+
+void VideoMailWidget::videoUpdated() {
+    emit sendVideoInfo(mediaObject->totalTime(), mediaObject->currentTime());
 }
 
 void VideoMailWidget::setSource(const QString &srcUrl) {
@@ -57,10 +65,24 @@ void VideoMailWidget::setSource(const QString &srcUrl) {
 void VideoMailWidget::play() {
     if (mediaObject->state() != Phonon::ErrorState) {
         mediaObject->play();
-        qDebug() << "Called play";
+        infoTimer.start();
     } else {
         qDebug() << "Media object in error state";
     }
+}
+
+void VideoMailWidget::pause() {
+    mediaObject->pause();
+    infoTimer.stop();
+}
+
+void VideoMailWidget::seek(double seekToPercentage) {
+    if (seekToPercentage < 0)
+         seekToPercentage = 0.0;
+    if (seekToPercentage > 1)
+        seekToPercentage = 1.0;
+    qint64 seekTo = mediaObject->totalTime() * seekToPercentage;
+    mediaObject->seek(seekTo);
 }
 
 QString stateName(const Phonon::State &state) {
@@ -82,9 +104,9 @@ QString stateName(const Phonon::State &state) {
     }
 }
 
-void VideoMailWidget::stateChanged(Phonon::State old, Phonon::State news) {
-    QString msg = QString("State changed from %1 to %2").arg(stateName(old), stateName(news));
-    qDebug(msg.toAscii().data());
+void VideoMailWidget::stateChanged(Phonon::State newState, Phonon::State oldState) {
+    QString msg = QString("State changed from %1 to %2").arg(stateName(oldState), stateName(newState));
+    qDebug() << msg;
 }
 
 
