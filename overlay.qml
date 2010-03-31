@@ -13,9 +13,10 @@ Item {
 
         Item {
             id: delegateWrapper
-            width: 200
+            width: 250
             height: 80
             Rectangle {
+                id: bgrect
                 radius: 10
                 anchors.fill: parent
                 gradient: Gradient {
@@ -38,21 +39,30 @@ Item {
                 }
             }
 
-            Row  {
-                x: 10
-                z : 2
-                Image {
-                    y: 10
-                    id: delegateImage
-                    source: model.image
-                }
-                Text {
-                    anchors.leftMargin: 10
-                    anchors.verticalCenter: delegateImage.verticalCenter
-                    text: model.text
-                    color: root.textColor
-                }
+            Image {
+                anchors.left: bgrect.left
+                anchors.leftMargin: 10
+                anchors.top: bgrect.top
+                anchors.topMargin: 10
+
+                id: delegateImage
+                source: model.image
+                width: 60
+                height: 60
+                smooth: true
+                fillMode: "PreserveAspectFit"
             }
+            Text {
+                width: bgrect.width - delegateImage.width - 20
+
+                anchors.left: delegateImage.right
+                anchors.leftMargin: 10
+                anchors.verticalCenter: delegateImage.verticalCenter
+                wrap: true
+                text: model.text
+                color: root.textColor
+            }
+
 
             MouseArea {
                 id: listItemMouseArea
@@ -86,7 +96,7 @@ Item {
         delegate: listItemDelegate
         anchors.top: parent.top
         anchors.right: parent.right
-        width: 200
+        width: 250
         height: 300
     }
 
@@ -94,7 +104,7 @@ Item {
         id: detailsArea
         anchors.right : stringList.left
 
-        width: 400
+        width: 500
         y: 200
         height: 300
 
@@ -138,6 +148,9 @@ Item {
                 id: detailImg
                 x: 30
                 y: 30
+                width: 80
+                smooth: true
+                fillMode: "PreserveAspectFit"
                 source: detailObject.url
             }
             Text {
@@ -149,6 +162,7 @@ Item {
                 wrap: true
                 font.pointSize: 20
                 font.bold: true
+                width: detailsArea.width - 40 - detailImg.width
                 smooth: true
                 text: detailObject.name
             }
@@ -158,6 +172,7 @@ Item {
                 anchors.top: detailTitle.bottom
                 anchors.left: detailImg.right
                 anchors.leftMargin: 20
+                width: detailsArea.width - 40 - detailImg.width
                 text: "Description: "
                 font.bold: true
             }
@@ -166,6 +181,7 @@ Item {
                 anchors.left: detailImg.right
                 anchors.top: detailDesc.bottom
                 anchors.leftMargin: 20
+                width: detailsArea.width - 40 - detailImg.width
                 wrap: true
 
                 text: detailObject.description
