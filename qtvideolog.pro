@@ -4,20 +4,24 @@
 #
 #-------------------------------------------------
 
-QT       += core gui declarative
+QT       += core gui declarative opengl
 
 TARGET = qtvideolog
 TEMPLATE = app
 
 SOURCES += main.cpp\
-    overlaywidget.cpp \
+    overlaymanager.cpp \
     dataobject.cpp \
-    simplelistmodel.cpp
+    simplelistmodel.cpp \
+    modifiedqdeclarativeview.cpp \
+    videomailwidget.cpp
 
 HEADERS  += \
-    overlaywidget.h \
+    overlaymanager.h \
     dataobject.h \
-    simplelistmodel.h
+    simplelistmodel.h \
+    modifiedqdeclarativeview.h \
+    videomailwidget.h
 
 OTHER_FILES += \
     overlay.qml

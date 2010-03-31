@@ -8,9 +8,13 @@ void printState(const Phonon::State &state);
 VideoMailWidget::VideoMailWidget(QWidget *parent):
     QWidget(parent)
 {
+    this->setMinimumWidth(1200);
+    this->setMinimumHeight(800);
     mediaObject = new Phonon::MediaObject(this);
 
     widget = new Phonon::VideoWidget(this);
+    widget->setMinimumWidth(this->minimumWidth());
+    widget->setMinimumHeight(this->minimumHeight());
     Phonon::createPath(mediaObject, widget);
 
     widget->setScaleMode(Phonon::VideoWidget::FitInView);
@@ -46,13 +50,11 @@ void VideoMailWidget::setSource(const QString &srcUrl) {
         qDebug("Non-local file");
     }
     mediaObject->setCurrentSource(*source);
+
+    play();
 }
 
 void VideoMailWidget::play() {
-    QTimer *timer = new QTimer(this);
-    timer->setInterval(1000);
-    QObject::connect(timer, SIGNAL(timeout()), this, SLOT(printCurrentTime()));
-
     if (mediaObject->state() != Phonon::ErrorState) {
         mediaObject->play();
         qDebug() << "Called play";

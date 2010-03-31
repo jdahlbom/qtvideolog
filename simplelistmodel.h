@@ -17,9 +17,11 @@ public:
 
 signals:
     void detailObjectChanged(DataObject *doPtr);
+    void videoLaunchRequested(QString videoSource);
 
 public slots:
-    void moreInfoRequested(int index);
+    void requestDetails(int index);
+    void requestVideoLaunch(int index);
 
 private:
     Q_DISABLE_COPY(SimpleListModel);

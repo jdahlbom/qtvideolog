@@ -18,8 +18,12 @@ private:
     OverlayManagerImpl *impl;
     void printDO();
     friend class OverlayManagerImpl;
+signals:
+    void videoLaunchRequested(QString source);
+
 public slots:
     void detailsChanged(DataObject *ptr);
+    void requestVideoLaunch(const QString &source);
 };
 
 

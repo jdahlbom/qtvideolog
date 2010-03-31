@@ -12,28 +12,23 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    ModifiedQDeclarativeView view;
+    QWidget mainWindow(0);
+    mainWindow.setMinimumSize(1200, 800);
+    ModifiedQDeclarativeView *view = new ModifiedQDeclarativeView(&mainWindow);
 
-    view.setViewport(new QGLWidget);
+    view->setViewport(new QGLWidget);
 
-    //OverlayManager *overlay = new OverlayManager(&view);
+    OverlayManager *overlay = new OverlayManager(view);
     VideoMailWidget video(0);
 
-    QFile sourceFile("media/Impact_movie.ogg");
-    if (!sourceFile.exists()) {
-        qDebug() << "Invalid file, does not exist.";
-    } else {
-        qDebug() << "File [" << sourceFile.fileName() <<"] exists.";
-    }
+    QObject::connect(overlay, SIGNAL(videoLaunchRequested(QString)),
+                     &video, SLOT(setSource(QString)));
 
-    video.setSource(sourceFile.fileName());
-    video.play();
-
-    QGraphicsProxyWidget *proxy = view.scene()->addWidget(&video);
-    proxy->show();
+    QGraphicsProxyWidget *proxy = view->scene()->addWidget(&video);
+    //proxy->show();
     proxy->setZValue(1.0f);
 
-    view.show();
+    mainWindow.show();
 
 
     return a.exec();

@@ -96,7 +96,11 @@ public:
     void init();
 
     QGraphicsScene scene;
+
+    static const qreal Z_OVERLAY;
 };
+
+const qreal ModifiedQDeclarativeViewPrivate::Z_OVERLAY = 2.0f;
 
 void ModifiedQDeclarativeViewPrivate::execute()
 {
@@ -186,8 +190,9 @@ ModifiedQDeclarativeView::ModifiedQDeclarativeView(QWidget *parent)
 ModifiedQDeclarativeView::ModifiedQDeclarativeView(const QUrl &source, QWidget *parent)
 : QGraphicsView(parent), d(new ModifiedQDeclarativeViewPrivate(this))
 {
-    setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
+    setSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum);
     d->init();
+    setResizeMode(SizeRootObjectToView);
     setSource(source);
 }
 
@@ -386,15 +391,18 @@ void ModifiedQDeclarativeView::setRootObject(QObject *obj)
 {
     if (QDeclarativeItem *item = qobject_cast<QDeclarativeItem *>(obj)) {
         d->scene.addItem(item);
+        item->setZValue(ModifiedQDeclarativeViewPrivate::Z_OVERLAY);
 
         d->root = item;
         d->qmlRoot = item;
         connect(item, SIGNAL(widthChanged()), this, SLOT(sizeChanged()));
         connect(item, SIGNAL(heightChanged()), this, SLOT(sizeChanged()));
-        if (d->initialSize.height() <= 0 && d->qmlRoot->width() > 0)
-            d->initialSize.setWidth(d->qmlRoot->width());
-        if (d->initialSize.height() <= 0 && d->qmlRoot->height() > 0)
-            d->initialSize.setHeight(d->qmlRoot->height());
+
+        QWidget *parentWidget = dynamic_cast<QWidget *>(parent());
+        if(parentWidget) {
+            d->initialSize.setWidth(parentWidget->width());
+            d->initialSize.setHeight(parentWidget->height());
+        }
         resize(d->initialSize);
 
         if (d->resizeMode == SizeRootObjectToView) {
@@ -460,6 +468,10 @@ void ModifiedQDeclarativeView::timerEvent(QTimerEvent* e)
 */
 QSize ModifiedQDeclarativeView::sizeHint() const
 {
+    QWidget *pWidget = dynamic_cast<QWidget *>(parent());
+    if (pWidget)
+        return QSize(pWidget->width(), pWidget->height());
+
     if (d->qmlRoot) {
         if (d->initialSize.width() <= 0)
             d->initialSize.setWidth(d->qmlRoot->width());

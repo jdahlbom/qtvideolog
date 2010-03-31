@@ -35,8 +35,11 @@ OverlayManagerImpl::OverlayManagerImpl(ModifiedQDeclarativeView *view, OverlayMa
     fakeModel = new SimpleListModel(self);
     QObject::connect(fakeModel, SIGNAL(detailObjectChanged(DataObject*)),
                      self, SLOT(detailsChanged(DataObject *)));
+    QObject::connect(fakeModel, SIGNAL(videoLaunchRequested(QString)),
+                     self, SLOT(requestVideoLaunch(const QString &)));
 
-    details = new DataObject(QString("detailit"), QColor("#BBBB44"), QUrl("jdahlbom.jpg"));
+    details = new DataObject(QString("detailit"), QColor("#BBBB44"),
+                             QUrl("jdahlbom.jpg"), QString(""));
     details->setDescription(QString("Kuvaus"));
 
     view->engine()->rootContext()->setContextProperty("fake_model", fakeModel);
@@ -59,4 +62,8 @@ OverlayManager::OverlayManager(ModifiedQDeclarativeView *view) : QObject::QObjec
 }
 OverlayManager::~OverlayManager() {
     delete(impl);
+}
+
+void OverlayManager::requestVideoLaunch(const QString &source) {
+    emit videoLaunchRequested(source);
 }

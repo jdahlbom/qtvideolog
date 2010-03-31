@@ -6,12 +6,14 @@ DataObject::DataObject(QObject *parent) :
 DataObject::DataObject(const QString &name,
                        const QColor &color,
                        const QUrl &url,
+                       const QString &videoSrc,
                        QObject *parent) :
 QObject(parent),
 m_name(name),
 m_color(color),
 m_url(url),
-m_description("")
+m_description(""),
+m_videoSource(videoSrc)
 {}
 
 DataObject & DataObject::operator= (const DataObject &rhs) {
@@ -19,6 +21,7 @@ DataObject & DataObject::operator= (const DataObject &rhs) {
     setColor(rhs.m_color);
     setUrl(rhs.m_url);
     setDescription(rhs.m_description);
+    setVideoSource(rhs.m_videoSource);
     return *this;
 }
 
@@ -36,18 +39,31 @@ void DataObject::setName(const QString &newName) {
 }
 
 void DataObject::setColor(const QColor &newColor) {
+    if (m_color == newColor)
+        return;
     m_color = newColor;
     emit colorChanged();
 }
 
 void DataObject::setUrl(const QUrl &newUrl) {
+    if (m_url == newUrl)
+        return;
     m_url = newUrl;
     emit urlChanged();
 }
 
 void DataObject::setDescription(const QString &desc) {
+    if (m_description == desc)
+        return;
     m_description = desc;
     emit descriptionChanged();
+}
+
+void DataObject::setVideoSource(const QString &videoSrc) {
+    if (m_videoSource == videoSrc)
+        return;
+    m_videoSource = videoSrc;
+    emit videoSourceChanged();
 }
 
 QString DataObject::description() const {
@@ -64,4 +80,8 @@ QColor DataObject::color() const {
 
 QString DataObject::name() const {
     return m_name;
+}
+
+QString DataObject::videoSource() const {
+    return m_videoSource;
 }
